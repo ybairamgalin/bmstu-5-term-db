@@ -88,7 +88,7 @@ create or replace procedure change_car_owner_phone_number(
 begin
     update public.car_owners co
     set phone_number = new_phone
-    where id = owner_id;
+    where co.id = owner_id;
 end;
 ' language plpgsql;
 
@@ -216,3 +216,5 @@ end;
 create or replace trigger check_start_production_date
 after insert on public.cars
     for each row execute procedure updated_at_cats_set();
+
+select current_database(), current_user;

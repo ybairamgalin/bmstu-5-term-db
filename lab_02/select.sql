@@ -129,17 +129,23 @@ delete from cars
 where id = (select id from cars order by id desc limit 1);
 
 --22
-with brand_count(name, count_cars) as (
-    select cman.name, avg(cmod.engine_power) as avg_engine_power, count(cman.name)
+with brand_count(name, country, count_cars) as (
+    select cman.name, cman.county country, count(cman.name)
     from cars c
            left join car_models cmod
                      on c.model_id = cmod.id
            left join car_manufacturers cman
                      on cmod.manufacturer_id = cman.id
-    group by cman.name)
-select brand_count.name
+    group by cman.name, cman.county)
+select
+    brand_count.name,
+    brand_count.count_cars,
+    brand_count.country,
+    row_number() over (
+        partition by brand_count.country
+        order by brand_count.count_cars desc) country_rating
 from brand_count
-where brand_count.count_cars = (select max(count_cars) from brand_count);
+order by brand_count.country;
 
 -- 24
 select cm.name, car_models.name,
