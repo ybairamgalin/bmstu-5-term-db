@@ -1,10 +1,11 @@
 version: '3.5'
 
 services:
-  db_lab_1:
-    container_name: db_lab_1
+  db_labs:
+    build: ./setup
+    container_name: db_labs
     ports:
-      - "5050:5050"
+      - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=docker_root
       - POSTGRES_USER=admin
